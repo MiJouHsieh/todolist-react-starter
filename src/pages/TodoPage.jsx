@@ -27,6 +27,8 @@ const dummyTodos = [
 const TodoPage = () => {
   const [inputValue, setInputValue] = useState('');
   const [todos, setTodos] = useState(dummyTodos);
+  const unCompletedTodosNumber = todos.filter((todo) => !todo.isDone).length;
+
   const handleChange = (value) => {
     setInputValue(value);
   };
@@ -84,19 +86,42 @@ const TodoPage = () => {
     });
   };
   // 從todoItem 傳上來被點擊的todo id 和 isEdit狀態
-  const handleChangeMode = ({id, isEdit}) => {
+  const handleChangeMode = ({ id, isEdit }) => {
     setTodos((prevTodos) => {
       return prevTodos.map((todo) => {
-        if(todo.id === id) {
+        if (todo.id === id) {
           return {
             ...todo,
-            isEdit
-          }
+            isEdit,
+          };
         }
-        return {...todo, isEdit: false}
-      })
-    })
-  }
+        return { ...todo, isEdit: false };
+      });
+    });
+  };
+  // 從todoItem 傳上來，編輯完後，點擊 Enter 做儲存
+  const handleSave = ({ id, title }) => {
+    setTodos((prevTodos) => {
+      return prevTodos.map((todo) => {
+        if (todo.id === id) {
+          return {
+            ...todo,
+            id,
+            title,
+            isEdit: false,
+          };
+        }
+        return todo;
+      });
+    });
+  };
+  const handleDelete = (id) => {
+    setTodos((prevTodos) => {
+      return prevTodos.filter((todo) => {
+        return todo.id !== id;
+      });
+    });
+  };
   return (
     <div>
       TodoPage
@@ -111,8 +136,10 @@ const TodoPage = () => {
         todos={todos}
         onToggleDone={handleToggleDone}
         onChangeMode={handleChangeMode}
+        onSave={handleSave}
+        onDelete={handleDelete}
       />
-      <Footer />
+      <Footer unCompletedTodosNumber={unCompletedTodosNumber} />
     </div>
   );
 };
