@@ -8,14 +8,6 @@ const TodoCollection = ({
   onChangeMode,
 }) => {
   return (
-    // <div>
-    //   TodoCollection
-    //   <TodoItem />
-    //   <TodoItem />
-    //   <TodoItem />
-    //   <TodoItem />
-    //   <TodoItem />
-    // </div>
     <div>
       {todos.map((todo) => {
         return (
